@@ -2,7 +2,7 @@ package com.chenyuhui.mybatis.test;
 
 import com.chenyuhui.mybatis.mapper.UserMapper;
 import com.chenyuhui.mybatis.pojo.User;
-import com.chenyuhui.mybatis.utils.SqlSessionUtils;
+import com.chenyuhui.mybatis.utils.SqlSessionUtil;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -37,7 +37,7 @@ public class MyBatisTest {
 
     @Test
     public void testInsertUser() {
-        SqlSession sqlSession = SqlSessionUtils.getSqlSession();
+        SqlSession sqlSession = SqlSessionUtil.getSqlSession();
         UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
         int result = userMapper.insertUser();
         System.out.println("结果：" + result);
@@ -45,7 +45,7 @@ public class MyBatisTest {
 
     @Test
     public void testDelete() {
-        SqlSession sqlSession = SqlSessionUtils.getSqlSession();
+        SqlSession sqlSession = SqlSessionUtil.getSqlSession();
         UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
         int result = userMapper.deleteUser();
         System.out.println("结果：" + result);
@@ -53,7 +53,7 @@ public class MyBatisTest {
 
     @Test
     public void testUpdate() {
-        SqlSession sqlSession = SqlSessionUtils.getSqlSession();
+        SqlSession sqlSession = SqlSessionUtil.getSqlSession();
         UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
         int result = userMapper.updateUser();
         System.out.println("结果：" + result);
@@ -61,7 +61,7 @@ public class MyBatisTest {
 
     @Test
     public void testSelectUserById() {
-        SqlSession sqlSession = SqlSessionUtils.getSqlSession();
+        SqlSession sqlSession = SqlSessionUtil.getSqlSession();
         UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
         User user = userMapper.selectUserById();
         System.out.println(user);
@@ -69,7 +69,7 @@ public class MyBatisTest {
 
     @Test
     public void testSelectAllUser() {
-        SqlSession sqlSession = SqlSessionUtils.getSqlSession();
+        SqlSession sqlSession = SqlSessionUtil.getSqlSession();
         UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
         List<User> list = userMapper.selectAllUser();
         System.out.println(list);

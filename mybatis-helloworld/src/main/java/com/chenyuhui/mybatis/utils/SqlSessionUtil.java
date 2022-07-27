@@ -9,7 +9,7 @@ import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class SqlSessionUtils {
+public class SqlSessionUtil {
 
     public static SqlSession getSqlSession() {
         SqlSession sqlSession = null;
