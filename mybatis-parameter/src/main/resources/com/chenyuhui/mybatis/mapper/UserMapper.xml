@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chenyuhui.mybatis.mapper.UserMapper">
+
+    <!--User getUserByName(String username);-->
+    <select id="getUserByName" resultType="User">
+        <!--select * from t_cyh_user where username = '${username}'-->
+        select * from t_cyh_user where username = #{username}
+    </select>
+
+    <!--User login(String username,String password);-->
+    <select id="login" resultType="User">
+        <!--select * from t_cyh_user where username = '${arg0}' and password = '${arg1}'-->
+        <!--select * from t_cyh_user where username = #{param1} and password = #{param2}-->
+        select * from t_cyh_user where username = #{arg0} and password = #{arg1}
+    </select>
+
+    <!--User loginByMap(Map map);-->
+    <select id="loginByMap" resultType="User">
+        <!--select * from t_cyh_user where username = '${username}' and password = '${password}'-->
+        select * from t_cyh_user where username = #{username} and password = #{password}
+    </select>
+
+    <!--void insertUser(User user);-->
+    <insert id="insertUser">
+        <!--insert t_cyh_user values(null,'${username}','${password}','${age}','${gender}','${email}')-->
+        insert t_cyh_user values(null,#{username},#{password},#{age},#{gender},#{email})
+    </insert>
+
+    <!--User loginByParameter(@Param("username") String username, @Param("password") String password);-->
+    <select id="loginByParameter" resultType="User">
+        <!--select * from t_cyh_user where username = '${username}' and password = '${password}'-->
+        select * from t_cyh_user where username = #{username} and password = #{password}
+    </select>
+
+</mapper>
