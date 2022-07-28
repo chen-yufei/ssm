@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chenyuhui.mybatis.mapper.EmployeeMapper">
+
+    <!--Employee getEmployeeByCondition(@Param("emp") Employee emp);-->
+    <select id="getEmployeeByConditionOne" resultType="Employee">
+        select * from t_cyh_employee where 1 = 1
+        <if test="emp.empName != '' and emp.empName != null">
+            and emp_name = #{emp.empName}
+        </if>
+        <if test="emp.age != '' and emp.age != null">
+            and age = #{emp.age}
+        </if>
+        <if test="emp.gender != '' and emp.age != null">
+            and gender = #{emp.gender}
+        </if>
+    </select>
+
+    <!--
+        where和if一般结合使用：
+        a>若where标签中的if条件都不满足，则where标签没有任何功能，即不会添加where关键字
+        b>若where标签中的if条件满足，则where标签会自动添加where关键字，并将条件最前方多余的and去掉
+        注意：where标签不能去掉条件最后多余的and
+    -->
+    <!--Employee getEmployeeByCondition(@Param("emp") Employee emp);-->
+    <select id="getEmployeeByConditionTwo" resultType="Employee">
+        select * from t_cyh_employee
+        <where>
+            <if test="emp.empName != '' and emp.empName != null">
+                emp_name = #{emp.empName}
+            </if>
+            <if test="emp.age != '' and emp.age != null">
+                and age = #{emp.age}
+            </if>
+            <if test="emp.gender != '' and emp.age != null">
+                and gender = #{emp.gender}
+            </if>
+        </where>
+    </select>
+
+    <!--
+        trim用于去掉或添加标签中的内容
+        常用属性：
+            prefix：在trim标签中的内容的前面添加某些内容
+            prefixOverrides：在trim标签中的内容的前面去掉某些内容
+            suffix：在trim标签中的内容的后面添加某些内容
+            suffixOverrides：在trim标签中的内容的后面去掉某些内容
+    -->
+    <!--Employee getEmployeeByCondition(@Param("emp") Employee emp);-->
+    <select id="getEmployeeByCondition" resultType="Employee">
+        select * from t_cyh_employee
+        <trim prefix="where" prefixOverrides="and">
+            <if test="emp.empName != '' and emp.empName != null">
+                emp_name = #{emp.empName}
+            </if>
+            <if test="emp.age != '' and emp.age != null">
+                and age = #{emp.age}
+            </if>
+            <if test="emp.gender != '' and emp.age != null">
+                and gender = #{emp.gender}
+            </if>
+        </trim>
+    </select>
+
+    <!--choose、when、 otherwise相当于if...else if..else-->
+    <!--List<Employee> getEmployeeByChoose(Employee emp);-->
+    <select id="getEmployeeByChoose" resultType="Employee">
+        select * from t_cyh_employee
+        <where>
+            <choose>
+                <when test="empName != '' and empName != null">
+                    emp_name = #{empName}
+                </when>
+                <when test="age != '' and age != null">
+                    age = #{age}
+                </when>
+                <when test="gender != '' and gender != null">
+                    gender = #{gender}
+                </when>
+                <otherwise>1 = 1</otherwise>
+            </choose>
+        </where>
+    </select>
+
+    <!--int insertMoreEmp(@Param("employees") List<Employee> employees);-->
+    <insert id="insertMoreEmp">
+        insert into t_cyh_employee values
+        <foreach collection="employees" separator="," item="emp">
+            (null,#{emp.empName},#{emp.age},#{emp.gender},null)
+        </foreach>
+    </insert>
+
+    <!--int deleteMoreEmp(@Param("empIds") int[] empIds);-->
+    <delete id="deleteMoreEmpOne">
+        delete from t_cyh_employee
+        where emp_id in
+        <foreach collection="empIds" item="empId" open="(" close=")" separator=",">
+            #{empId}
+        </foreach>
+    </delete>
+
+    <!--int deleteMoreEmp(@Param("empIds") int[] empIds);-->
+    <delete id="deleteMoreEmp">
+        delete from t_cyh_employee
+        where
+        <foreach collection="empIds" item="empId" separator="or">
+            emp_id = #{empId}
+        </foreach>
+    </delete>
+
+    <!--sql片段-->
+    <sql id="empColumns">
+        emp_name,age,gender
+    </sql>
+
+    <!--List<Employee> getAllEmployee();-->
+    <select id="getAllEmployee" resultType="Employee">
+        select
+        <include refid="empColumns"></include>
+        from t_cyh_employee
+    </select>
+
+</mapper>
