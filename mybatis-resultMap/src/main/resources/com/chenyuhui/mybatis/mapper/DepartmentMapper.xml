@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chenyuhui.mybatis.mapper.DepartmentMapper">
+
+
+    <!--Department getDeptById(@Param("deptId") int deptId);-->
+    <select id="getDeptById" resultType="Department">
+        select * from t_cyh_department where dept_id = #{deptId}
+    </select>
+
+    <!--一对多映射处理-->
+    <resultMap id="deptEmpMapper" type="Department">
+        <id column="dept_id" property="deptId"></id>
+        <result column="dept_name" property="deptName"></result>
+        <collection property="employeeList" ofType="Employee">
+            <id column="emp_id" property="empId"></id>
+            <result column="emp_name" property="empName"></result>
+            <result column="age" property="age"></result>
+            <result column="gender" property="gender"></result>
+        </collection>
+    </resultMap>
+    
+    <!--Department getDeptEmpById(@Param("deptId") int deptId);-->
+    <select id="getDeptEmpById" resultMap="deptEmpMapper">
+        select
+            dept.*,emp.*
+        from t_cyh_department dept
+        left join t_cyh_employee emp
+        on dept.dept_id = emp.dept_id
+        where dept.dept_id = #{deptId}
+    </select>
+
+    <!--分步查询-->
+    <resultMap id="deptEmpStepMapper" type="Department">
+        <id column="dept_id" property="deptId"></id>
+        <result column="dept_name" property="deptName"></result>
+        <collection property="employeeList"
+                    select="com.chenyuhui.mybatis.mapper.EmployeeMapper.getEmployeeByDeptId"
+                    column="dept_id">
+        </collection>
+    </resultMap>
+
+    <!--Department getDeptEmpByStep(@Param("deptId") int deptId);-->
+    <select id="getDeptEmpByStep" resultMap="deptEmpStepMapper">
+        select * from t_cyh_department where dept_id = #{deptId}
+    </select>
+
+</mapper>

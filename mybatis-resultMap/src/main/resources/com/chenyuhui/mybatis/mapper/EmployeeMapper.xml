@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chenyuhui.mybatis.mapper.EmployeeMapper">
+
+    <!--
+        字段名跟实体类的属性名不一致的情况下如何处理映射关系
+        1、为查询的字段名设置别名，和属性名保持一致
+        2、可以在MyBatis的核心配置文件中设置一个全局配置信息mapUnderscoreToCamelCase，
+           可以在查询表中数据时，自动将_类型的字段名转换为驼峰
+        3、自定义ResultMap处理字段跟属性的映射关系
+    -->
+
+    <!--
+        resultMap：设置自定义映射属性：
+        id：表示自定义映射的唯一标识
+        type：查询的数据要映射的实体类的类型
+        子标签：
+            id：设置主键的映射关系
+            result：设置普通字段的映射关系
+            association：设置多对一的映射关系
+                    fetchType:设置当前的分步查询是否使用延迟加载(lazy:延迟加载  eager:立即加载)
+            collection：设置一对多的映射关系
+                属性：
+                    property：设置映射关系中实体类中的属性名
+                    column：设置映射关系中表中的字段名
+     -->
+    <resultMap id="employeeMapper" type="Employee">
+        <id column="emp_id" property="empId"></id>
+        <result column="emp_name" property="empName"></result>
+        <result column="age" property="age"></result>
+        <result column="gender" property="gender"></result>
+    </resultMap>
+
+    <!--Employee getEmployeeById(@Param("empId") String empId);-->
+    <select id="getEmployeeById" resultMap="employeeMapper">
+        <!--select emp_id empId,emp_name empName,age,gender from t_cyh_employee where emp_id = #{empId}  -->
+        select * from t_cyh_employee where emp_id = #{empId}
+    </select>
+
+    <!--Employee getEmployeeById(@Param("empId") String empId);-->
+    <select id="getEmployeeByIdOld" resultType="Employee">
+        <!--select emp_id empId,emp_name empName,age,gender from t_cyh_employee where emp_id = #{empId}  -->
+        select * from t_cyh_employee where emp_id = #{empId}
+    </select>
+
+    <!--级联方式处理映射关系-->
+    <resultMap id="empDeptMapperOne" type="Employee">
+        <id column="emp_id" property="empId"></id>
+        <result column="emp_name" property="empName"></result>
+        <result column="age" property="age"></result>
+        <result column="gender" property="gender"></result>
+        <result column="dept_id" property="department.deptId"></result>
+        <result column="dept_name" property="department.deptName"></result>
+    </resultMap>
+    
+    <!--List<Employee> getAllEmployee();-->
+    <select id="getAllEmployeeOne" resultMap="empDeptMapperOne">
+        select
+            emp.*,dept.*
+        from t_cyh_employee emp
+        left join t_cyh_department dept
+        on emp.dept_id = dept.dept_id
+    </select>
+
+    <!--使用association处理映射关系-->
+    <resultMap id="empDeptMapperTwo" type="Employee">
+        <id column="emp_id" property="empId"></id>
+        <result column="emp_name" property="empName"></result>
+        <result column="age" property="age"></result>
+        <result column="gender" property="gender"></result>
+        <association property="department" javaType="Department" fetchType="lazy">
+            <id column="dept_id" property="deptId"></id>
+            <result column="dept_name" property="deptName"></result>
+        </association>
+    </resultMap>
+
+    <!--List<Employee> getAllEmployee();-->
+    <select id="getAllEmployeeTwo" resultMap="empDeptMapperTwo">
+        select
+            emp.*,dept.*
+        from t_cyh_employee emp
+        left join t_cyh_department dept
+        on emp.dept_id = dept.dept_id
+    </select>
+
+
+    <!--分步查询-->
+    <resultMap id="empDeptMapper" type="Employee">
+        <id column="emp_id" property="empId"></id>
+        <result column="emp_name" property="empName"></result>
+        <result column="age" property="age"></result>
+        <result column="gender" property="gender"></result>
+        <!--
+            select：设置分步查询，查询某个属性的值的sql的标识（namespace.sqlId）
+            column：将sql以及查询结果中的某个字段设置为分步查询的条件
+        -->
+        <association property="department"
+                     select="com.chenyuhui.mybatis.mapper.DepartmentMapper.getDeptById"
+                     column="dept_id">
+        </association>
+    </resultMap>
+
+    <!--List<Employee> getAllEmployee();-->
+    <select id="getAllEmployee" resultMap="empDeptMapper">
+        select * from t_cyh_employee
+    </select>
+
+    <!--List<Employee> getEmployeeByDeptId(@Param("deptId") int deptId);-->
+    <select id="getEmployeeByDeptId" resultType="Employee">
+        select * from t_cyh_employee where dept_id = #{deptId}
+    </select>
+
+</mapper>
