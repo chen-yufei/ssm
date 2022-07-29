@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- bean的后置处理器要放入IOC容器才能生效 -->
+    <bean id="myBeanProcessor" class="com.chenyuhui.spring.process.MyBeanProcessor"/>
+
+    <!-- 使用init-method属性指定初始化方法 -->
+    <!-- 使用destroy-method属性指定销毁方法 -->
+    <bean id="user" class="com.chenyuhui.spring.pojo.User" scope="singleton"
+          init-method="initMethod" destroy-method="destroyMethod">
+        <property name="userId" value="0001"></property>
+        <property name="userName" value="root"></property>
+        <property name="age" value="23"></property>
+        <property name="password" value="1998"></property>
+    </bean>
+</beans>

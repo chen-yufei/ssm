@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/util https://www.springframework.org/schema/util/spring-util.xsd">
+
+
+    <bean id="helloWorld" class="com.chenyuhui.spring.pojo.HelloWorld"></bean>
+
+    <bean id="student" class="com.chenyuhui.spring.pojo.Student"></bean>
+
+    <!--依赖注入之setter注入-->
+    <bean id="studentOne" class="com.chenyuhui.spring.pojo.Student">
+        <!-- property标签：通过组件类的setXxx()方法给组件对象设置属性 -->
+        <!-- name属性：指定属性名（这个属性名是getXxx()、setXxx()方法定义的，和成员变量无关）-->
+        <!-- value属性：指定属性值 -->
+        <property name="stuId" value="2022001"></property>
+        <property name="stuName" value="root"></property>
+        <property name="age" value="23"></property>
+        <property name="gender" value="男"></property>
+    </bean>
+
+    <!--依赖注入之构造器注入-->
+    <!--
+        注意：
+        constructor-arg标签还有两个属性可以进一步描述构造器参数：
+        index属性：指定参数所在位置的索引（从0开始）
+        name属性：指定参数名
+    -->
+    <bean id="studentTwo" class="com.chenyuhui.spring.pojo.Student">
+        <constructor-arg value="20220002"></constructor-arg>
+        <constructor-arg value="admin"></constructor-arg>
+        <constructor-arg value="22"></constructor-arg>
+        <constructor-arg value="女"></constructor-arg>
+    </bean>
+
+    <!--特殊值处理-->
+
+    <!--null值-->
+    <bean id="studentThree" class="com.chenyuhui.spring.pojo.Student">
+        <property name="stuId" value="2022001"></property>
+        <property name="stuName" value="root"></property>
+        <property name="age" value="23"></property>
+        <property name="gender">
+            <null/>
+        </property>
+    </bean>
+
+    <!--xml实体-->
+    <!-- 小于号在XML文档中用来定义标签的开始，不能随便使用 -->
+    <!-- 解决方案一：使用XML实体来代替 -->
+    <bean id="studentFour" class="com.chenyuhui.spring.pojo.Student">
+        <property name="stuId" value="2022001"></property>
+        <property name="stuName" value="&lt;aaa&gt;"></property>
+        <property name="age" value="23"></property>
+        <property name="gender" value="男"></property>
+    </bean>
+
+    <!-- 解决方案二：使用CDATA节 -->
+    <bean id="studentFive" class="com.chenyuhui.spring.pojo.Student">
+        <property name="stuId" value="2022001"></property>
+        <property name="stuName">
+            <value><![CDATA[<aaa>]]></value>
+        </property>
+        <property name="age" value="23"></property>
+        <property name="gender" value="男"></property>
+    </bean>
+
+    <!--为类类型属性赋值-->
+    <!--方式一：引用外部已声明的bean:配置Clazz类型的bean-->
+    <bean id="clazzOne" class="com.chenyuhui.spring.pojo.Clazz">
+        <property name="clazzId" value="01"></property>
+        <property name="clazzName" value="一班"></property>
+    </bean>
+
+    <bean id="studentSix" class="com.chenyuhui.spring.pojo.Student">
+        <property name="stuId" value="2022001"></property>
+        <property name="stuName" value="root"></property>
+        <property name="age" value="23"></property>
+        <property name="gender" value="男"></property>
+        <property name="clazz" ref="clazzOne"></property>
+    </bean>
+
+    <!--方式二：内部bean-->
+    <bean id="studentSeven" class="com.chenyuhui.spring.pojo.Student">
+        <property name="stuId" value="2022001"></property>
+        <property name="stuName" value="root"></property>
+        <property name="age" value="23"></property>
+        <property name="gender" value="男"></property>
+        <property name="clazz">
+            <bean id="clazzInner" class="com.chenyuhui.spring.pojo.Clazz">
+                <property name="clazzId" value="02"></property>
+                <property name="clazzName" value="二班"></property>
+            </bean>
+        </property>
+    </bean>
+
+    <!--方式三：级联属性赋值-->
+    <bean id="studentEight" class="com.chenyuhui.spring.pojo.Student">
+        <property name="stuId" value="2022001"></property>
+        <property name="stuName" value="root"></property>
+        <property name="age" value="23"></property>
+        <property name="gender" value="男"></property>
+        <property name="clazz" ref="clazzOne"></property>
+        <property name="clazz.clazzId" value="03"></property>
+        <property name="clazz.clazzName" value="三班"></property>
+    </bean>
+
+    <!--为数组类型属性赋值-->
+    <bean id="studentNine" class="com.chenyuhui.spring.pojo.Student">
+        <property name="stuId" value="2022001"></property>
+        <property name="stuName" value="root"></property>
+        <property name="age" value="23"></property>
+        <property name="gender" value="男"></property>
+        <property name="hobbies">
+            <array>
+                <value>唱</value>
+                <value>跳</value>
+                <value>Rap</value>
+                <value>篮球</value>
+            </array>
+        </property>
+        <property name="clazz" ref="clazzOne"></property>
+    </bean>
+
+    <!--为集合类型属性赋值-->
+    <!--若为Set集合类型属性赋值，只需要将其中的list标签改为set标签即可-->
+    <bean id="clazzTwo" class="com.chenyuhui.spring.pojo.Clazz">
+        <property name="clazzId" value="06"></property>
+        <property name="clazzName" value="六班"></property>
+        <property name="students">
+            <list>
+                <ref bean="studentOne"></ref>
+                <ref bean="studentTwo"></ref>
+                <ref bean="studentThree"></ref>
+            </list>
+        </property>
+    </bean>
+
+    <!--为Map集合类型属性赋值-->
+    <bean id="teacherOne" class="com.chenyuhui.spring.pojo.Teacher">
+        <property name="teaId" value="10010"></property>
+        <property name="teaName" value="大宝"></property>
+    </bean>
+    <bean id="teacherTwo" class="com.chenyuhui.spring.pojo.Teacher">
+        <property name="teaId" value="10086"></property>
+        <property name="teaName" value="二宝"></property>
+    </bean>
+    <bean id="studentTen" class="com.chenyuhui.spring.pojo.Student">
+        <property name="stuId" value="2022001"></property>
+        <property name="stuName" value="root"></property>
+        <property name="age" value="23"></property>
+        <property name="gender" value="男"></property>
+        <property name="hobbies">
+            <array>
+                <value>唱</value>
+                <value>跳</value>
+                <value>Rap</value>
+                <value>篮球</value>
+            </array>
+        </property>
+        <property name="teacherMap">
+            <map>
+                <entry>
+                    <key>
+                        <value>10010</value>
+                    </key>
+                    <ref bean="teacherOne"></ref>
+                </entry>
+                <entry>
+                    <key>
+                        <value>10011</value>
+                    </key>
+                    <ref bean="teacherTwo"></ref>
+                </entry>
+            </map>
+        </property>
+        <property name="clazz" ref="clazzOne"></property>
+    </bean>
+
+    <!--引用集合类型的bean-->
+    <!--list集合类型的bean-->
+    <util:list id="students">
+        <ref bean="studentOne"></ref>
+        <ref bean="studentTwo"></ref>
+        <ref bean="studentThree"></ref>
+    </util:list>
+    <!--map集合类型的bean-->
+    <util:map id="teacherMap">
+        <entry>
+            <key><value>10010</value></key>
+            <ref bean="teacherOne"></ref>
+        </entry>
+        <entry>
+            <key><value>10011</value></key>
+            <ref bean="teacherTwo"></ref>
+        </entry>
+    </util:map>
+    <bean id="clazzThree" class="com.chenyuhui.spring.pojo.Clazz">
+        <property name="clazzId" value="04"></property>
+        <property name="clazzName" value="四班"></property>
+        <property name="students" ref="students"></property>
+    </bean>
+
+    <bean id="studentEleven" class="com.chenyuhui.spring.pojo.Student">
+        <property name="stuId" value="2022001"></property>
+        <property name="stuName" value="root"></property>
+        <property name="age" value="23"></property>
+        <property name="gender" value="男"></property>
+        <property name="hobbies">
+            <array>
+                <value>唱</value>
+                <value>跳</value>
+                <value>Rap</value>
+                <value>篮球</value>
+            </array>
+        </property>
+        <property name="teacherMap" ref="teacherMap"></property>
+        <property name="clazz" ref="clazzOne"></property>
+    </bean>
+
+    <!--p命名空间-->
+    <bean id="studentTwelve" class="com.chenyuhui.spring.pojo.Student"
+          p:stuId="1000" p:stuName="小亮" p:age="22" p:gender="男" p:clazz-ref="clazzOne" p:teacherMap-ref="teacherMap"></bean>
+
+</beans>
