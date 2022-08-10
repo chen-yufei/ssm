@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>首页</title>
+</head>
+<body>
+<h1>index.html</h1>
+
+<h3>SpringMVC测试@RequestMapping注解</h3>
+<a th:href="@{/hello}">HelloWorld</a>  <br/><br/>
+
+<a th:href="@{/testRequestMapping}">测试@RequestMapping的value属性-- >/testRequestMapping</a><br/><br/>
+<a th:href="@{/test}">测试@RequestMapping的value属性-->/test</a><br><br/>
+
+<a th:href="@{/testRequestMethod}">测试@RequestMapping的ReqeustMethod属性-->/testRequestMethod</a><br/><br/>
+<form th:action="@{/testRequestMethod}" method="post">
+    <input type="submit" th:value="测试RequestMapping的ReqeustMethod属性testRequestMethod">
+</form>
+
+<br/><br/>
+
+<a th:href="@{/testParams(username='admin',password=123456)}">测试@RequestMapping的params属性-->/test</a><br><br/>
+
+<a th:href="@{/testHeaders}">测试@RequestMapping的headers属性</a><br/><br/>
+
+<a th:href="@{/testRest/1/admin}">测试路径中的占位符</a><br/><br/>
+
+<hr/>
+
+<h3>SpringMVC获取请求参数</h3>
+
+<form th:action="@{/testParamByServletAPI}" method="post">
+    用户名：<input th:type="text" name="username" /><br/><br/>
+    密码：<input th:type="password" name="password"/><br/><br/>
+    <input th:type="submit" th:value="用servletAPI提交参数"><br/><br/>
+</form>
+
+<form th:action="@{/testParam}" method="post">
+    用户名：<input th:type="text" name="username" /><br/><br/>
+    密码：<input th:type="password" name="password"/><br/><br/>
+    <input th:type="submit" th:value="通过控制器方法的形参获取请求参数"><br/><br/>
+</form>
+
+<form th:action="@{/testParamByRequestParam}" method="post">
+    用户名：<input th:type="text" name="username" /><br/><br/>
+    密码：<input th:type="password" name="password"/><br/><br/>
+    <input th:type="submit" th:value="通过RequestParam注解获取请求参数"><br/><br/>
+</form>
+
+<br/><br/>
+
+<a th:href="@{/testParamHeader}">通过@RequestHeader获取请求参数</a><br/><br/>
+
+<a th:href="@{/testParamCookieValue}">通过@CookieValue获取请求参数</a><br/><br/>
+
+<form th:action="@{/testParamByBean}" method="post">
+    用户名：<input th:type="text" name="username" /><br/><br/>
+    密码：<input th:type="password" name="password"/><br/><br/>
+    性别：<input th:type="radio" name="sex" th:value="男"/>男<input th:type="radio" name="sex" th:value="女"/>女<br/><br/>
+    年龄：<input th:type="text" name="age" /><br/><br/>
+    邮箱：<input th:type="text" name="email" /><br/><br/>
+    <input th:type="submit" th:value="通过实体类对象获取请求参数"><br/><br/>
+</form>
+
+</body>
+</html>
