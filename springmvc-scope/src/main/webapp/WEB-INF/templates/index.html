@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>首页</title>
+</head>
+<body>
+<h1>index.html</h1>
+
+<h3>向request域对象共享数据</h3>
+<a th:href="@{/testServletAPI}">使用ServletAPI向request域对象共享数据</a><br/><br/>
+<a th:href="@{/testModelAndView}">使用ModelAndView向request域对象共享数据</a><br/><br/>
+<a th:href="@{/testModel}">使用Model向request域对象共享数据</a><br/><br/>
+<a th:href="@{/testMap}">使用map向request域对象共享数据</a><br/><br/>
+<a th:href="@{/testModelMap}">使用ModelMap向request域对象共享数据</a><br/><br/>
+
+<h3>向session域对象共享数据</h3>
+<a th:href="@{/testSession}">向session域共享数据</a>
+
+<h3>向application域对象共享数据</h3>
+<a th:href="@{/testApplication}">向application域共享数据</a><br><br>
+
+<h3>测试视图</h3>
+<a th:href="@{/testThymeleafView}">测试ThymeleafView</a><br><br>
+<a th:href="@{/testForward}">测试InternalResourceView</a><br><br>
+<a th:href="@{/testRedirect}">测试RedirectView</a><br><br>
+
+<h3>RestFul测试</h3>
+<a th:href="@{/user}">查询所有用户信息</a><br>
+<a th:href="@{/user/1}">根据id查询用户信息</a><br><br>
+<form th:action="@{/user}" method="post">
+    用户名：<input type="text" name="username"><br>
+    密码：<input type="password" name="password"><br>
+    <input type="submit" value="添加"><br>
+</form>
+<br><br>
+<form th:action="@{/user/1}" method="post">
+    <input type="hidden" name="_method" value="PUT">
+    用户名：<input type="text" name="username"><br>
+    密码：<input type="password" name="password"><br>
+    <input type="submit" value="修改"><br>
+</form>
+
+
+</body>
+</html>
