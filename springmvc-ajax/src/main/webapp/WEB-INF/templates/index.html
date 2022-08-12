@@ -13,12 +13,6 @@
     <input type="button" value="测试@RequestBody获取json格式的请求参数-实体类对象" @click="testResponseBodyBean()"><br><br>
     <input type="button" value="测试@RequestBody获取json格式的请求参数-List集合对象" @click="testResponseBodyList()"><br><br>
     <input type="button" value="测试@RequestBody获取json格式的请求参数-Map集合对象" @click="testResponseBodyMap()"><br><br>
-    <hr>
-    <a th:href="@{/test/down}">下载图片</a><br>
-    <form th:action="@{/test/up}" method="post" enctype="multipart/form-data">
-        图片：<input type="file" name="photo"><br>
-        <input type="submit" value="上传">
-    </form>
 </div>
 
 <script type="text/javascript" th:src="@{/js/vue.js}"></script>
